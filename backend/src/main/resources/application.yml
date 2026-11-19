@@ -2,7 +2,7 @@ spring:
   application:
     name: threatlens
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/threatlens}
+    url: ${DB_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:threatlens}}
     username: ${DB_USER:threatlens}
     password: ${DB_PASSWORD:threatlens}
   jpa:
@@ -29,6 +29,9 @@ threatlens:
   ml-service-url: ${ML_SERVICE_URL:http://localhost:8000}
   # If set, POST /api/ingest/** requires header X-API-Key with this value.
   ingest-api-key: ${INGEST_API_KEY:}
+  # Exact origins or patterns, e.g. https://*.vercel.app
   cors-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000,http://localhost:8081}
   # Assets whose compromise matters most; alerts touching them get a risk bonus.
+  # Directory with the bundled sample datasets; if set, they are loaded on first boot.
+  seed-dir: ${SEED_DIR:}
   critical-assets: ${CRITICAL_ASSETS:DC01,FIN-SRV01,192.168.10.50}

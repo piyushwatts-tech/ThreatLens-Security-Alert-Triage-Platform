@@ -36,20 +36,30 @@ template summaries, so nothing breaks.
 ANTHROPIC_API_KEY=sk-ant-... docker compose up --build
 ```
 
-### Deploy the dashboard to Vercel
+### Live deployment (Render + Vercel, free tiers)
 
-The React dashboard has a **demo mode** that serves a snapshot of real API responses
-(`frontend/public/demo-data.json`, captured from the seeded stack), so it runs on static hosting with
-no Java or Python backend. Triage actions work in memory and reset on reload, and timestamps are
-shifted so the data always looks recent.
+The backend, ML service and Postgres run on [Render](https://render.com) from `render.yaml`, and the
+dashboard runs on [Vercel](https://vercel.com). On first boot the API loads the bundled CIC-IDS2017 and
+Windows samples (only when the database is empty), so the live site starts with real alerts.
 
-1. On [vercel.com/new](https://vercel.com/new), import this repository.
-2. Set **Root Directory** to `frontend`. `frontend/vercel.json` already sets the build command
-   (`VITE_DEMO=true npm run build`) and the output directory.
-3. Deploy. Every push to `main` redeploys.
+1. **Backend.** In Render, choose **New → Blueprint**, pick this repository and click **Apply**. This
+   creates `threatlens-db` (Postgres), `threatlens-api` (Spring Boot) and `threatlens-ml` (FastAPI).
+   The first build takes about 10 minutes. Optionally set `ANTHROPIC_API_KEY` on `threatlens-ml` for
+   Claude-written summaries.
+2. Check that `https://threatlens-api.onrender.com/api/stats/overview` returns JSON. If Render gave the
+   services other URLs, use those, and update `ML_SERVICE_URL` on `threatlens-api` to the ML service's URL.
+3. **Dashboard.** On [vercel.com/new](https://vercel.com/new), import this repository, set **Root
+   Directory** to `frontend`, add the environment variable `VITE_API_URL` =
+   `https://threatlens-api.onrender.com`, and deploy.
 
-To point a deployment at a real backend instead, drop `VITE_DEMO=true` from the build command and
-set `VITE_API_URL` to the backend URL. Add that origin to the backend's `CORS_ORIGINS`.
+The API allows any `https://*.vercel.app` origin by default (`CORS_ORIGINS`). Ingestion endpoints
+require the `INGEST_API_KEY` that Render generates. Free Render services sleep after 15 idle minutes,
+so the first page load can take up to a minute, and free Render Postgres databases expire after
+30 days (redeploying the blueprint creates a fresh, re-seeded one).
+
+**Demo mode.** Without `VITE_API_URL`, the Vercel build serves a snapshot of real API responses
+(`frontend/public/demo-data.json`), so the dashboard also works with no backend at all. Triage
+actions then work in memory and reset on reload.
 
 <details>
 <summary>Run without Docker (for development)</summary>
@@ -248,13 +258,14 @@ If `INGEST_API_KEY` is set, ingestion requires the `X-API-Key` header. The compa
 ```
 backend/      Spring Boot 3.5, Java 21, JPA + Flyway, PostgreSQL
   detection/  rule interface, burst windows, 9 rules, ML rule, engine, risk scorer
-  ingest/     CIC-IDS2017 + Windows/OTRF parsers, ingest service
+  ingest/     CIC-IDS2017 + Windows/OTRF parsers, ingest service, first-boot seeder
   alert/      workflow, audit trail, playbooks, summaries
 ml-service/   FastAPI + scikit-learn Isolation Forest + Anthropic SDK
 frontend/     React 18 + TypeScript + Vite + Recharts (light and dark themes)
 mobile/       Expo / React Native on-call screen
 data/         sample datasets, generator, real-dataset downloader
 scripts/      seeding helpers
+render.yaml   Render blueprint (Postgres + API + ML service) for the live site
 ```
 
 ## Tests and CI

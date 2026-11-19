@@ -37,14 +37,19 @@ export function Overview({ onDrill }: Props) {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    const load = () => api.overview().then(setData).catch((e) => setErr(String(e.message ?? e)));
+    const load = () => api.overview().then((d) => { setData(d); setErr(null); }).catch((e) => setErr(String(e.message ?? e)));
     load();
     const t = setInterval(load, 30_000);
     return () => clearInterval(t);
   }, []);
 
   if (err) return <div className="empty">Could not reach the API: {err}</div>;
-  if (!data) return <div className="empty">Loading…</div>;
+  if (!data)
+    return (
+      <div className="empty">
+        Loading…{import.meta.env.VITE_API_URL && " The hosted API sleeps when idle, so the first load can take up to a minute."}
+      </div>
+    );
   if (data.totalAlerts === 0)
     return (
       <div className="empty">
