@@ -1,0 +1,15 @@
+# build outputs
+backend/target/
+frontend/node_modules/
+frontend/dist/
+mobile/node_modules/
+mobile/.expo/
+__pycache__/
+*.pyc
+.pytest_cache/
+ml-service/models/*.joblib
+data/raw/
+.env
+.idea/
+.vscode/
+*.log
