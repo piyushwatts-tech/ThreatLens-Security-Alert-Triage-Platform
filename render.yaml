@@ -25,9 +25,11 @@ services:
         fromDatabase: { name: threatlens-db, property: user }
       - key: DB_PASSWORD
         fromDatabase: { name: threatlens-db, property: password }
-      # Public URL of the ML service below. Change it if Render gives that service another name.
+      # Public URL of the threatlens-ml service below, copied from the Render dashboard
+      # (e.g. https://threatlens-ml-xxxx.onrender.com). Render adds a suffix when a name is
+      # already taken, so it can't be hard-coded. Detection still works while it is unset.
       - key: ML_SERVICE_URL
-        value: https://threatlens-ml.onrender.com
+        sync: false
       # Load the bundled CIC-IDS2017 / Windows samples on first boot (only when the DB is empty).
       - key: SEED_DIR
         value: /app/seed
