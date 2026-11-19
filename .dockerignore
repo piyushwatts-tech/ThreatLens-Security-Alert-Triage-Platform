@@ -1,0 +1,6 @@
+**/node_modules
+**/target
+**/__pycache__
+ml-service/models
+data/raw
+.git

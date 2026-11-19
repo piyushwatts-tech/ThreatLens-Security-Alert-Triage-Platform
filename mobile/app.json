@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "ThreatLens",
+    "slug": "threatlens-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#121211",
+    "ios": { "supportsTablet": true },
+    "android": { "adaptiveIcon": { "backgroundColor": "#121211" } }
+  }
+}
