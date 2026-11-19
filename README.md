@@ -57,10 +57,6 @@ require the `INGEST_API_KEY` that Render generates. Free Render services sleep a
 so the first page load can take up to a minute, and free Render Postgres databases expire after
 30 days (redeploying the blueprint creates a fresh, re-seeded one).
 
-**Demo mode.** Without `VITE_API_URL`, the Vercel build serves a snapshot of real API responses
-(`frontend/public/demo-data.json`), so the dashboard also works with no backend at all. Triage
-actions then work in memory and reset on reload.
-
 <details>
 <summary>Run without Docker (for development)</summary>
 

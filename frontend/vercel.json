@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "installCommand": "npm ci",
-  "buildCommand": "if [ -n \"$VITE_API_URL\" ]; then npm run build; else VITE_DEMO=true npm run build; fi",
+  "buildCommand": "test -n \"$VITE_API_URL\" || { echo \"Set VITE_API_URL to the backend URL (see README)\" >&2; exit 1; }; npm run build",
   "outputDirectory": "dist"
 }
