@@ -6,6 +6,9 @@ with an **explainable** risk model, adds an **ML anomaly detector** and **LLM tr
 gives analysts a **React dashboard** and a **React Native on-call screen** to work the queue from
 `NEW → INVESTIGATING → CLOSED`.
 
+**Live:** [threatlens-security-alert-triage-pl.vercel.app](https://threatlens-security-alert-triage-pl.vercel.app)
+(dashboard on Vercel, API and ML service on Render's free plan, so the first load can take about a minute)
+
 ![Overview dashboard](docs/screenshots/overview-dark.png)
 
 | | |
