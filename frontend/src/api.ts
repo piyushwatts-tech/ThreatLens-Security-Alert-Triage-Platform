@@ -1,4 +1,3 @@
-import { demoApi } from "./demo";
 import type { AlertDetail, AlertFilters, AlertRow, AlertStatus, Overview, Page, Resolution, Rule } from "./types";
 
 const BASE = import.meta.env.VITE_API_URL ?? "";
@@ -20,7 +19,7 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-const liveApi = {
+export const api = {
   overview: () => http<Overview>("/api/stats/overview"),
   rules: () => http<Rule[]>("/api/rules"),
   mlHealth: () => http<{ status: string; modelLoaded: boolean; llmEnabled: boolean; llmModel: string | null }>("/api/ml/health"),
@@ -63,7 +62,3 @@ const liveApi = {
 
   runDetections: () => http<{ alertsCreated: number }>("/api/detections/run", { method: "POST" }),
 };
-
-/** On static hosting (Vercel) the dashboard runs against a bundled snapshot instead of the Java API. */
-export const DEMO = import.meta.env.VITE_DEMO === "true";
-export const api: typeof liveApi = DEMO ? demoApi : liveApi;
