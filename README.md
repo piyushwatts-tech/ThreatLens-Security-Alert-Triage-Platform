@@ -49,9 +49,9 @@ Windows samples (only when the database is empty), so the live site starts with 
 2. Render shows each service's public URL (for example `https://threatlens-api-xxxx.onrender.com`;
    it adds a suffix when a name is taken). Set `ML_SERVICE_URL` on `threatlens-api` to the
    `threatlens-ml` URL, then check that `<api-url>/api/stats/overview` returns JSON.
-3. **Dashboard.** On [vercel.com/new](https://vercel.com/new), import this repository, set **Root
-   Directory** to `frontend`, add the environment variable `VITE_API_URL` to
-   the `threatlens-api` URL, and deploy.
+3. **Dashboard.** On [vercel.com/new](https://vercel.com/new), import this repository and click Deploy;
+   the root `vercel.json` builds `frontend/`. It points at the hosted API by default; set
+   `VITE_API_URL` in Vercel to use a different backend.
 
 The API allows any `https://*.vercel.app` origin by default (`CORS_ORIGINS`). Ingestion endpoints
 require the `INGEST_API_KEY` that Render generates. Free Render services sleep after 15 idle minutes,

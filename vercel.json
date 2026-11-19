@@ -1,21 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite"
-    },
-    "ml-service": {
-      "root": "ml-service",
-      "framework": "fastapi"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": {
-        "service": "frontend"
-      }
-    }
-  ]
+  "framework": "vite",
+  "installCommand": "cd frontend && npm ci",
+  "buildCommand": "cd frontend && VITE_API_URL=${VITE_API_URL:-https://threatlens-api-wexo.onrender.com} npm run build",
+  "outputDirectory": "frontend/dist"
 }
