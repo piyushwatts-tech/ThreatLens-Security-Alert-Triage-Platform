@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { DEMO } from "./api";
 import { AlertQueue } from "./components/AlertQueue";
 import { Overview } from "./components/Overview";
 import { Rules } from "./components/Rules";
@@ -50,6 +51,14 @@ export default function App() {
           <input value={analyst} onChange={(e) => setAnalyst(e.target.value.trim() || "analyst")} />
         </label>
       </header>
+      {DEMO && (
+        <div className="demo-banner">
+          Live demo running on a snapshot of the seeded platform. Triage actions work but reset on reload.{" "}
+          <a href="https://github.com/piyushwatts-tech/ThreatLens-Security-Alert-Triage-Platform" target="_blank" rel="noreferrer">
+            Source and full stack setup
+          </a>
+        </div>
+      )}
       <main>
         {tab === "overview" && (
           <Overview onDrill={(patch) => { setFilters({ ...DEFAULT_FILTERS, ...patch }); setTab("alerts"); }} />
