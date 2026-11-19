@@ -9,4 +9,5 @@ RUN python -m threatlens_ml.train --csv /data/sample/cicids2017_sample.csv
 RUN useradd --system --uid 10001 threatlens
 USER threatlens
 EXPOSE 8000
-CMD ["uvicorn", "threatlens_ml.app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Hosts such as Render inject PORT; default to 8000 for Docker Compose.
+CMD exec uvicorn threatlens_ml.app:app --host 0.0.0.0 --port ${PORT:-8000}

@@ -28,7 +28,7 @@ services:
       retries: 20
 
   backend:
-    build: ./backend
+    build: { context: ., dockerfile: backend/Dockerfile }
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/threatlens
       DB_USER: threatlens

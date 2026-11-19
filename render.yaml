@@ -1,0 +1,54 @@
+# Render Blueprint: Postgres + Spring Boot API + Python ML service, all on the free plan.
+# Deploy: Render dashboard -> New -> Blueprint -> pick this repo. See README "Live deployment".
+databases:
+  - name: threatlens-db
+    plan: free
+    databaseName: threatlens
+    user: threatlens
+
+services:
+  - type: web
+    name: threatlens-api
+    runtime: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: threatlens-db, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: threatlens-db, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: threatlens-db, property: database }
+      - key: DB_USER
+        fromDatabase: { name: threatlens-db, property: user }
+      - key: DB_PASSWORD
+        fromDatabase: { name: threatlens-db, property: password }
+      # Public URL of the ML service below. Change it if Render gives that service another name.
+      - key: ML_SERVICE_URL
+        value: https://threatlens-ml.onrender.com
+      # Load the bundled CIC-IDS2017 / Windows samples on first boot (only when the DB is empty).
+      - key: SEED_DIR
+        value: /app/seed
+      # Vercel production and preview URLs, plus local dev.
+      - key: CORS_ORIGINS
+        value: https://*.vercel.app,http://localhost:5173
+      # Ingestion endpoints require this as X-API-Key; the dashboard does not need it.
+      - key: INGEST_API_KEY
+        generateValue: true
+      # Keep the JVM inside the free plan's 512 MB.
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:+UseSerialGC -Xss512k -XX:MaxRAMPercentage=70
+
+  - type: web
+    name: threatlens-ml
+    runtime: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: ./ml-service/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      # Optional: enables Claude-written alert summaries; template summaries are used without it.
+      - key: ANTHROPIC_API_KEY
+        sync: false
