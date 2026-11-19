@@ -36,6 +36,21 @@ template summaries, so nothing breaks.
 ANTHROPIC_API_KEY=sk-ant-... docker compose up --build
 ```
 
+### Deploy the dashboard to Vercel
+
+The React dashboard has a **demo mode** that serves a snapshot of real API responses
+(`frontend/public/demo-data.json`, captured from the seeded stack), so it runs on static hosting with
+no Java or Python backend. Triage actions work in memory and reset on reload, and timestamps are
+shifted so the data always looks recent.
+
+1. On [vercel.com/new](https://vercel.com/new), import this repository.
+2. Set **Root Directory** to `frontend`. `frontend/vercel.json` already sets the build command
+   (`VITE_DEMO=true npm run build`) and the output directory.
+3. Deploy. Every push to `main` redeploys.
+
+To point a deployment at a real backend instead, drop `VITE_DEMO=true` from the build command and
+set `VITE_API_URL` to the backend URL. Add that origin to the backend's `CORS_ORIGINS`.
+
 <details>
 <summary>Run without Docker (for development)</summary>
 

@@ -207,3 +207,4 @@ td.cb, th.cb { width: 32px; }
   main { padding: 16px; }
 }
 .mitre .sub { display: block; }
+.demo-banner { padding: 8px 20px; font-size: 13px; background: var(--hover); color: var(--text-2); border-bottom: 1px solid var(--border); }
